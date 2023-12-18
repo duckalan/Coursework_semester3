@@ -149,7 +149,7 @@ def color_with_backtracking(graph:nx.Graph) -> dict[NodeView, Color]:
         subgraph_color_map: dict[NodeView, Color] = {}
         color_counter = 0
 
-        # Пока не покрашены все узлы в графе (ЗАМЕНИТЬ НА СВЯЗНЫЙ ПОДГРАФ)
+        # Пока не покрашены все узлы в подграфе
         while any(node not in subgraph_color_map.keys() for node in subgraph.nodes) and color_counter < len(full_color_palette):
             subgraph_color_map.clear()
             color_palette.append(full_color_palette[color_counter])
