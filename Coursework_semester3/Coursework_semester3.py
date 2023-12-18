@@ -19,9 +19,18 @@ def init_graph_from_user_input() -> nx.Graph:
     while True:
         try:
             edges = literal_eval(input())
-            return nx.Graph(edges)
-        except Exception:
+            graph = nx.Graph(edges)
+            
+            if not nx.is_planar(graph):
+                raise Exception('Переданный граф не является планарным')
+            
+            return graph
+        except ValueError:
             print('Некорректный ввод')
+        except nx.NetworkXException:
+            print('Некорректный ввод рёбер графа. ')
+        except Exception as error:
+            print(error)
 
 
 def init_test_graph() -> nx.Graph:
