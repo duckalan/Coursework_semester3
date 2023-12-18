@@ -83,6 +83,7 @@ def draw_graph(graph:nx.Graph, color_map:dict[NodeView, Color]) -> None:
 
 def find_free_colors(colored_neighbors:tuple[tuple[NodeView, Color]], current_color_palette:list[Color]) -> tuple[Color]:
     """Нахождение из текущей палитры всех цветов, которые не заняты соседями. Если вернулся пустой кортёж, значит свободных цветов нет"""
+
     free_colors = []
     
     for color in current_color_palette:
@@ -114,15 +115,16 @@ def backtracking(node:NodeView, graph:nx.Graph, color_map:dict[NodeView, Color],
                 # Проходим по оставшимся непокрашенным узлам
                 uncolored_neighbors = tuple(neighbor for neighbor in graph.neighbors(node) if neighbor not in color_map.keys())
                 for neighbor in uncolored_neighbors:
-                    backtracking(neighbor, graph, color_map, color_palette)
-                        
-                    # Случай, когда сосед остался незакрашенным, потому что в цветовой палитре
-                    # не осталось свободных цветов. Так мы очищаем карту в обратном ходе
-                    # и доходим до узла, цвет которого можно изменить. После изменения идём
-                    # ещё раз по тому же пути
                     if neighbor not in color_map.keys():
-                        color_map.pop(node)
-                        break;
+                        backtracking(neighbor, graph, color_map, color_palette)
+                        
+                        # Случай, когда сосед остался незакрашенным, потому что в цветовой палитре
+                        # не осталось свободных цветов. Так мы очищаем карту в обратном ходе
+                        # и доходим до узла, цвет которого можно изменить. После изменения идём
+                        # ещё раз по тому же пути
+                        if neighbor not in color_map.keys():
+                            color_map.pop(node)
+                            break
                 
 
 def color_with_backtracking(graph:nx.Graph) -> dict[NodeView, Color]:
@@ -133,6 +135,7 @@ def color_with_backtracking(graph:nx.Graph) -> dict[NodeView, Color]:
     
     # Находим все разъединённые части графа
     subgraphs = tuple(nx.connected_components(graph))
+
     # Общая карта цвета для всего графа
     color_map:dict[NodeView, Color] = {}
     
@@ -160,7 +163,7 @@ def color_with_backtracking(graph:nx.Graph) -> dict[NodeView, Color]:
     return color_map
    
 
-graph = init_test_graph() #init_graph_from_user_input()
+graph = init_graph_from_user_input()
 
 color_map = color_with_backtracking(graph)
 
